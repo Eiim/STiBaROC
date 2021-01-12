@@ -54,11 +54,11 @@ gpu.setPaletteColor(5, 0xFF7E54) -- Orange
 gpu.setPaletteColor(6, 0xFF9F54) -- Light orange
 gpu.setPaletteColor(7, 0xFFCE4F) -- Yellow
 component.gpu.freeAllBuffers()
-local mainBuf = component.gpu.allocateBuffer(160, 120)
+local mainBuf = component.gpu.allocateBuffer(156, 120)
 if mainBuf == nil then
 	print("Can't allocate buffer, trying again")
 	component.gpu.freeAllBuffers()
-	mainBuf = component.gpu.allocateBuffer(160, 120)
+	mainBuf = component.gpu.allocateBuffer(156, 120)
 	if mainBuf == nil then
 		quit("Failed to allocate buffer! Is something else consuming vram?")
 	end
@@ -85,43 +85,39 @@ end
 function renderMain()
 	gpu.setActiveBuffer(mainBuf)
 
-	gpu.setBackground(2, true)
-	gpu.fill(1, 1, 2, 120, " ")
-	gpu.fill(159, 1, 2, 120, " ")
-
 	gpu.setBackground(1, true)
 	gpu.setForeground(0, true)
 	for p = 1, 20, 1 do
 		post = posts[postNums[p]]
-		gpu.fill(3, ((p-1)*6)+1, 156, 5, " ")
-		gpu.set(4, ((p-1)*6)+2, post["title"])
-		gpu.set(4+unicode.wlen(post["title"]), ((p-1)*6)+2, " by "..post["poster"])
+		gpu.fill(1, ((p-1)*6)+1, 156, 5, " ")
+		gpu.set(2, ((p-1)*6)+2, post["title"])
+		gpu.set(2+unicode.wlen(post["title"]), ((p-1)*6)+2, " by "..post["poster"])
 		if post["verified"] then
-			gpu.set(4+unicode.wlen(post["title"])+4+unicode.wlen(post["poster"]), ((p-1)*6)+2, " ☑")
+			gpu.set(2+unicode.wlen(post["title"])+4+unicode.wlen(post["poster"]), ((p-1)*6)+2, " ☑")
 		end
 		if unicode.wlen(post["content"]) > 154 then
-			gpu.set(4, ((p-1)*6)+3, unicode.wtrunc(post["content"], 151).."...")
+			gpu.set(2, ((p-1)*6)+3, unicode.wtrunc(post["content"], 151).."...")
 		else
-			gpu.set(4, ((p-1)*6)+3, post["content"])
+			gpu.set(2, ((p-1)*6)+3, post["content"])
 		end
 		local linLen = 0
 		if post["upvotes"] + post["downvotes"] <= 10 then
-			gpu.fill(4, ((p-1)*6)+4, post["upvotes"], 1, "▲")
+			gpu.fill(2, ((p-1)*6)+4, post["upvotes"], 1, "▲")
 			linLen = post["upvotes"]
-			gpu.fill(4+linLen, ((p-1)*6)+4, post["downvotes"], 1, "▼")
+			gpu.fill(2+linLen, ((p-1)*6)+4, post["downvotes"], 1, "▼")
 			linLen = linLen + post["downvotes"]
 		else
 			local updvstr = "+"..tostring(post["upvotes"])..",-"..tostring(post["upvotes"])
-			gpu.set(4, ((p-1)*6)+4, updvstr)
+			gpu.set(2, ((p-1)*6)+4, updvstr)
 			linLen = unicode.wlen(updvstr)
 		end
 		if post["comments"] > 0 then
-			gpu.set(6+linLen, ((p-1)*6)+4, post["comments"].." comments")
+			gpu.set(4+linLen, ((p-1)*6)+4, post["comments"].." comments")
 		end
 	end
 	gpu.setBackground(2, true)
 	for p = 1, 20, 1 do
-		gpu.fill(3, ((p-1)*6)+6, 156, 1, " ")
+		gpu.fill(1, ((p-1)*6)+6, 156, 1, " ")
 	end
 	maxScroll = 82
 end
@@ -135,23 +131,23 @@ end
 function renderPost()
 	gpu.setActiveBuffer(mainBuf)
 	gpu.setBackground(2, true)
-	gpu.fill(1, 1, 160, 120, " ")
+	gpu.fill(1, 1, 156, 120, " ")
 	local postText = text.detab(postData["content"], 4)
 	gpu.setBackground(1, true)
 	gpu.setForeground(0, true)
-	gpu.fill(3, 1, 156, 4, " ")
-	gpu.set(4, 2, postData["title"].." by "..postData["poster"])
+	gpu.fill(1, 1, 156, 4, " ")
+	gpu.set(2, 2, postData["title"].." by "..postData["poster"])
 	if postData["verified"] then
-		gpu.set(10+unicode.wlen(postData["title"])+unicode.wlen(postData["poster"]), 2, "☑")
+		gpu.set(8+unicode.wlen(postData["title"])+unicode.wlen(postData["poster"]), 2, "☑")
 	end
-	gpu.set(4, 3, "Posted "..postData["postdate"])
+	gpu.set(2, 3, "Posted "..postData["postdate"])
 	local postLines = 4
 	local linLen = 0
 	if(#postText > 0) then
 		postLines = postLines + 1
 		for c in postText:gmatch"." do
 			if linLen == 0 then
-				gpu.fill(3, postLines, 156, 1, " ")
+				gpu.fill(1, postLines, 156, 1, " ")
 			end
 			if c == "\n" then
 				postLines = postLines + 1
@@ -160,22 +156,22 @@ function renderPost()
 				if linLen >= 154 then
 					postLines = postLines + 1
 					linLen = 0
-					gpu.fill(3, postLines, 156, 1, " ")
+					gpu.fill(1, postLines, 156, 1, " ")
 				end
-				gpu.set(4+linLen, postLines, c)
+				gpu.set(2+linLen, postLines, c)
 				linLen = linLen + 1
 			end
 		end
 	end
 	postLines = postLines + 1
-	gpu.fill(3, postLines, 156, 3, " ")
+	gpu.fill(1, postLines, 156, 3, " ")
 	postLines = postLines + 1
 	if postData["upvotes"] + postData["downvotes"] <= 10 then
-		gpu.fill(4, postLines, postData["upvotes"], 1, "▲")
-		gpu.fill(4+postData["upvotes"], postLines, postData["downvotes"], 1, "▼")
+		gpu.fill(2, postLines, postData["upvotes"], 1, "▲")
+		gpu.fill(2+postData["upvotes"], postLines, postData["downvotes"], 1, "▼")
 	else
 		local updvstr = "+"..tostring(postData["upvotes"])..",-"..tostring(postData["upvotes"])
-		gpu.set(4, postLines, updvstr)
+		gpu.set(2, postLines, updvstr)
 	end
 	postLines = postLines + 3
 	if postData["comments"] ~= nil then
@@ -184,15 +180,15 @@ function renderPost()
 			if com == nil then
 				break
 			else
-				gpu.fill(3, postLines, 156, 4, " ")
-				gpu.set(4, postLines+1, com["poster"])
+				gpu.fill(1, postLines, 156, 4, " ")
+				gpu.set(2, postLines+1, com["poster"])
 				if com["verified"] then
-					gpu.set(5+unicode.wlen(com["poster"]), postLines+1, "☑")
+					gpu.set(3+unicode.wlen(com["poster"]), postLines+1, "☑")
 				end
 				if #com["content"] > 154 then
-					gpu.set(4, postLines+2, unicode.wtrunc(com["content"], 151).."...")
+					gpu.set(2, postLines+2, unicode.wtrunc(com["content"], 151).."...")
 				else
-					gpu.set(4, postLines+2, com["content"])
+					gpu.set(2, postLines+2, com["content"])
 				end
 				postLines = postLines + 5
 			end
@@ -209,7 +205,7 @@ function renderLogo()
 	gpu.setBackground(2, true)
 	gpu.fill(1, 1, 160, 12 , " ")
 
-	local logx = 39
+	local logx = 37
 	gpu.setBackground(5, true) -- Orange
 	gpu.set(logx+6, 2, "      ") -- 3x2
 	gpu.set(logx+14, 2, "                ") -- 8x2
@@ -301,12 +297,17 @@ end
 
 -- #Run functions#
 
+gpu.setActiveBuffer(0)
+gpu.setBackground(2, true)
+gpu.fill(1, 13, 2, 38, " ")
+gpu.fill(159, 13, 2, 38, " ")
+
 renderLogo()
 
 loadMain()
 renderMain()
 
-gpu.bitblt(0, 1, 13, 160, 38, mainBuf, scroll, 1)
+gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 
 gpu.setActiveBuffer(0)
 gpu.setForeground(0, true)
@@ -319,24 +320,23 @@ while true do
 	elseif id == "key_down" then
 		if b == 208 and scroll <= maxScroll then
 			scroll = scroll + 1
-			gpu.bitblt(0, 1, 13, 160, 38, mainBuf, scroll, 1)
+			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 		elseif b == 200 and scroll > 1 then
 			scroll = scroll - 1
-			gpu.bitblt(0, 1, 13, 160, 38, mainBuf, scroll, 1)
+			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 		end
 	elseif id == "touch" then
 		if screen == "main" and a > 2 and a < 159 and b > 12 and (b-14+scroll) % (6) < 5 then
 			loadPost(postNums[1+math.floor((scroll+b-14)/6)])
 			renderPost()
 			scroll = 1
-			gpu.bitblt(0, 1, 13, 160, 38, mainBuf, scroll, 1)
+			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 			screen = "post"
 		elseif screen ~= "main" and a > 38 and a < 81 and b > 1 and b < 12 then
-			print("Clicked on main button")
 			loadMain()
 			renderMain()
 			scroll = 1
-			gpu.bitblt(0, 1, 13, 160, 38, mainBuf, scroll, 1)
+			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 			screen = "main"
 		end
 	end
