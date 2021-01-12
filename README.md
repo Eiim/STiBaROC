@@ -20,7 +20,7 @@ To install STiBaROC, for now, run `wget cdn.jsdelivr.net/gh/rxi/json.lua/json.lu
 
 ## How do I use this?
 
-There's not a lot to do right now, but you can click on posts to view them, and then click on the STiBaRC logo to return to the front page. **It may take a long time to load!** Have patience when loading, especially with posts. Post rendering is currently poorly optimized. It should improve in the near-ish future. If you're from the far-ish future, why not fix it yourself and open a PR?
+There's not a lot to do right now, but you can click on posts to view them, and then click on the STiBaRC logo to return to the front page. You can also use up/down arrows to scroll and the left arrow to go back, which will take you to the same place on the homescreen you were at. **It may take a long time to load!** Have patience when loading, especially with posts. Post rendering is currently poorly optimized. It should improve in the near-ish future with more efficient algorithms and the soon-to-be-released STiBaRC v4 API. If you're from the far-ish future, why not fix it yourself and open a PR?
 
 ## Do you intend to support STiBaROC?
 
