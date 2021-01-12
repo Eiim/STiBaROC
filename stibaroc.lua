@@ -29,7 +29,7 @@ function dump(o)
 end
 
 function sget(ept)
-	local ua = {["User-Agent"] = "STiBaROC/0.1"}
+	local ua = {["User-Agent"] = "STiBaROC/0.0.2"}
 	res = internet.request("https://api.stibarc.com/"..ept, nil, ua)
 	local con = ""
 	for chunk in res do con = con..chunk end
@@ -349,6 +349,7 @@ while true do
 			loadMain()
 			renderMain()
 			scroll = 1
+			mainScroll = 1
 			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 			screen = "main"
 			gpu.setActiveBuffer(0)
