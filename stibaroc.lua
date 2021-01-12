@@ -29,7 +29,7 @@ function dump(o)
 end
 
 function sget(ept)
-	local ua = {["User-Agent"] = "STiBaROC/0.0.2"}
+	local ua = {["User-Agent"] = "STiBaROC/0.1"}
 	res = internet.request("https://api.stibarc.com/"..ept, nil, ua)
 	local con = ""
 	for chunk in res do con = con..chunk end
