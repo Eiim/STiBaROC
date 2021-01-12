@@ -12,7 +12,7 @@ STiBaROC is one of a couple clients for STiBaRC which allow you to use STiBaRC, 
 
 ## How do I install this?
 
-First, you'll need to install OpenComputers using a recent build from the https://ci.cil.li/. As of writing, the releases on CurseForge **do not** work, as they do not include the newer buffer functionality used to improve scrolling preformance.
+First, you'll need to install OpenComputers using a recent build from the https://ci.cil.li/. As of writing, the releases on CurseForge **do not** work, as they do not include the newer buffer functionality used to improve scrolling performance.
 
 Then, you'll need a top-tier computer: tier 3 case, tier 3 screen, internet card, and a tier 3 graphics card. A tier 3 CPU and tier 3.5 RAM are preferable. As always, you'll also need a flashed EEPROM, install floppy, power source, and keyboard. More setup info can be found on the [OpenComputers wiki](https://ocdoc.cil.li/tutorial:oc1_basic_computer).
 
