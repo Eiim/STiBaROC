@@ -3,12 +3,14 @@ local component = require("component")
 local event = require("event")
 local unicode = require("unicode")
 local text = require("text")
+local keyboard = require("keyboard")
 local json = dofile(os.getenv("HOME") .. "/json.lua")
 local gpu = component.gpu
 local pageNum = 1
 local posts
 local scroll = 1
 local maxScroll = 82
+local mainScroll = 1
 local screen = "main"
 local postData
 local postNums = {}
@@ -309,21 +311,31 @@ renderMain()
 
 gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 
-gpu.setActiveBuffer(0)
 gpu.setForeground(0, true)
 gpu.setBackground(1, true)
+
+gpu.setActiveBuffer(0)
 
 while true do
 	local id, _, a, b = event.pullMultiple("touch", "key_down", "interrupted")
 	if id == "interrupted" then
 		quit()
 	elseif id == "key_down" then
-		if b == 208 and scroll <= maxScroll then
+		if b == keyboard.keys.down and scroll <= maxScroll then
 			scroll = scroll + 1
+			if screen == "main" then mainScroll = mainScroll + 1 end
 			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
-		elseif b == 200 and scroll > 1 then
+		elseif b == keyboard.keys.up and scroll > 1 then
 			scroll = scroll - 1
+			if screen == "main" then mainScroll = mainScroll - 1 end
 			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
+		elseif b == keyboard.keys.left and screen == "post" then
+			loadMain()
+			renderMain()
+			gpu.setActiveBuffer(0)
+			scroll = mainScroll
+			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, mainScroll, 1)
+			screen = "main"
 		end
 	elseif id == "touch" then
 		if screen == "main" and a > 2 and a < 159 and b > 12 and (b-14+scroll) % (6) < 5 then
@@ -332,12 +344,14 @@ while true do
 			scroll = 1
 			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 			screen = "post"
+			gpu.setActiveBuffer(0)
 		elseif screen ~= "main" and a > 38 and a < 81 and b > 1 and b < 12 then
 			loadMain()
 			renderMain()
 			scroll = 1
 			gpu.bitblt(0, 3, 13, 156, 38, mainBuf, scroll, 1)
 			screen = "main"
+			gpu.setActiveBuffer(0)
 		end
 	end
 end
