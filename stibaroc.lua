@@ -154,7 +154,7 @@ function renderPost()
 			if c == "\n" then
 				postLines = postLines + 1
 				linLen = 0
-			else
+			elseif c ~= "\r" then
 				if linLen >= 154 then
 					postLines = postLines + 1
 					linLen = 0
